@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSachiv_dotnet", "PSachiv_dotnet.csproj", "{AEFC626D-7F24-48AA-B2AF-E76B82D29EAF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEFC626D-7F24-48AA-B2AF-E76B82D29EAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEFC626D-7F24-48AA-B2AF-E76B82D29EAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEFC626D-7F24-48AA-B2AF-E76B82D29EAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEFC626D-7F24-48AA-B2AF-E76B82D29EAF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5776A561-3ECF-4F15-9813-899F55505054}
+	EndGlobalSection
+EndGlobal
