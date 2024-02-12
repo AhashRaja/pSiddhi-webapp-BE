@@ -20,8 +20,8 @@ namespace PSachiv_dotnet.Services
             var httpClient = _httpClientFactory.CreateClient();
             var tokenRequest = new Dictionary<string, string>
             {
-                { "client_id", "d322e6be-133a-4c9b-9bbb-df2566b83b14" },
-                { "client_secret", "sZ98Q~~ErbJjZDOsj2FpK5ru3RN~5oohglejqbyl" },
+                { "client_id", "48851c48-610d-4a79-bb2a-2f67757f9261" },
+                { "client_secret", "n9.8Q~cNDgXHP9KtNz9Xy0YR6.Cq9vii1Y~3tadD" },
                 { "grant_type", "client_credentials" },
                 { "scope", "https://graph.microsoft.com/.default" }
             };
@@ -30,7 +30,7 @@ namespace PSachiv_dotnet.Services
             {
                 var requestContent = new FormUrlEncodedContent(tokenRequest);
 
-                var response = await httpClient.PostAsync("https://login.microsoftonline.com/8399c1c2-9c1b-4d0d-97fb-e0cfed231878/oauth2/v2.0/token", requestContent);
+                var response = await httpClient.PostAsync("https://login.microsoftonline.com/041abf65-a74f-472f-ac6a-c0ab0f1f8679/oauth2/v2.0/token", requestContent);
 
                 if (response.IsSuccessStatusCode)
                 {
