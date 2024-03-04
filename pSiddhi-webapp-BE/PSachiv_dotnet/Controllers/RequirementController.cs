@@ -99,7 +99,7 @@ namespace PSachiv_dotnet.Controllers
 
 
         [HttpGet("GetEntriesByRequirementId")] // get values based on requirement id
-        public async Task<IActionResult> GetEntriesByRequirementId(double requirementId)
+        public async Task<IActionResult> GetEntriesByRequirementId(string requirementId)
         {
             try
             {
@@ -118,7 +118,7 @@ namespace PSachiv_dotnet.Controllers
 
                     // Use LINQ to find entries matching the provided requirement ID
                     var matchingEntries = valuesArray
-                        .Where(entry => entry.Count() > 0 && entry[0].ToString() == requirementId.ToString())
+                        .Where(entry => entry.Count() > 0 && entry[0].ToString() == requirementId)
                         .Select(entry => new Req
                         {
                             reqId = entry[0].ToString(),
