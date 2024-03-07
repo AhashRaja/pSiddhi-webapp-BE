@@ -16,7 +16,46 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration); // Add Microsoft Graph API authentication
 builder.Services.AddScoped<AccessTokenService>();
 
+// Define the CORS policy name
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+// Configure CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          // Get the UI domain from configuration
+                          var uiDomain = builder.Configuration.GetSection("UI_Domain").Value;
+
+                          if (uiDomain != null)
+                          {
+                              // Allow requests from the specified UI domain
+                              policy.WithOrigins(uiDomain)
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod()
+                                    .AllowCredentials();
+                          }
+                          else
+                          {
+                              throw new InvalidOperationException("UI_Domain is not configured correctly.");
+                          }
+                      });
+});
+
+
 var app = builder.Build();
+
+// Use CORS with the specified policy
+app.UseCors(MyAllowSpecificOrigins);
+
+/*// Configure CORS
+app.UseCors(options => 
+        { 
+            options.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader(); 
+        });*/
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
