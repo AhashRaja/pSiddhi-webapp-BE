@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PSachiv_dotnet")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6b05591f487d49cef962c13abed265fd921f808c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3098fb205b610a165deba703c48a66be0e97dbeb")]
 [assembly: System.Reflection.AssemblyProductAttribute("PSachiv_dotnet")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PSachiv_dotnet")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
