@@ -97,9 +97,74 @@ namespace PSachiv_dotnet.Controllers
             }
         }
 
+        [HttpGet("GetAllEntriesByRequirementId")] // get all values based on requirement id
+        public async Task<IActionResult> GetAllEntriesByRequirementId(string requirementId)
+        {
+            try
+            {
+                var accessToken = await _accessTokenService.GetAccessTokenAsync();
+                using var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-        [HttpGet("GetEntriesByRequirementId")] // get values based on requirement id
-        public async Task<IActionResult> GetEntriesByRequirementId(string requirementId)
+                var response = await httpClient.GetAsync("https://graph.microsoft.com/v1.0/sites/7bhrxr.sharepoint.com,28983962-2b27-4b16-976c-24ebb19788d6,9b8c48bb-f5a5-4e40-92d6-8978f10efaad/drives/b!YjmYKCcrFkuXbCTrsZeI1rtIjJul9UBOktaJePEO-q2B8AEr-kgpQJgsYIVKte_z/items/01MP4UW3UXIP62MK4R6NB2V2WP6DNQTEYI/workbook/worksheets('Sheet1')/usedRange");
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var jsonObject = JObject.Parse(jsonResponse);
+
+                    // Get the array of values from the response
+                    var valuesArray = jsonObject["values"] as JArray;
+
+                    // Use LINQ to find entries matching the provided requirement ID
+                    var matchingEntries = valuesArray
+                        .Where(entry => entry.Count() > 0 && entry[0].ToString() == requirementId)
+                        .Select(entry => new Req
+                        {
+                            reqId = entry[0].ToString(),
+                            reqName = entry[1].ToString(),
+                            band = entry[2].ToString(),
+                            level = entry[3].ToString(),
+                            position_type = entry[4].ToString(),
+                            number_of_openings = entry[5].ToString(),
+                            account = entry[6].ToString(),
+                            coe = entry[7].ToString(),
+                            coe_manager = entry[8].ToString(),
+                            criticality = entry[9].ToString(),
+                            years_of_experience_needed = entry[10].ToString(),
+                            expected_date_of_closure = entry[11].ToString(),
+                            requirement_Type = entry[12].ToString(),
+                            oc_stage1_approval_status = entry[13].ToString(),
+                            strategyMeet_status = entry[14].ToString(),
+                            dipstick_status = entry[15].ToString(),
+                            oc_stage2_approval_status = entry[16].ToString(),
+                            status = entry[17].ToString(),
+
+                        })
+                        .FirstOrDefault(); // Assuming you only expect one matching entry
+
+                    if (matchingEntries != null)
+                    {
+                        return Ok(matchingEntries);
+                    }
+                    else
+                    {
+                        return NotFound(); // Return 404 if no matching entry is found
+                    }
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    return StatusCode((int)response.StatusCode, errorResponse);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("GetSpecificEntriesByRequirementId")] // get values based on requirement id
+        public async Task<IActionResult> GetSpecificEntriesByRequirementId(string requirementId)
         {
             try
             {
@@ -293,7 +358,6 @@ namespace PSachiv_dotnet.Controllers
 
     public class Req
     {
-        [System.Text.Json.Serialization.JsonIgnore]
         public string reqId { get; set; }
         public string reqName { get; set; }
         public string band { get; set; }
