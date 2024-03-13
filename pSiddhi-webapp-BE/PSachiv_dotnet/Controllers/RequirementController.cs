@@ -303,6 +303,72 @@ namespace PSachiv_dotnet.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpPost("AddSpecificEntry")]
+        public async Task<IActionResult> AddSpecificEntry([FromBody] Req req)
+        {
+            try
+            {
+                var accessToken = await _accessTokenService.GetAccessTokenAsync();
+                using var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                // Fetch the latest requirement ID and increment it
+                var latestRequirementId = await GetLatestRequirementId();
+                var newRequirementId = latestRequirementId + 1;
+
+
+                var requestBody = new EntryRequestModel
+                {
+                    values = new List<List<object>>
+                    {
+                        new List<object>
+                        {
+                            newRequirementId.ToString(),
+                            req.reqName,
+                            req.band,
+                            req.level,
+                            req.position_type,
+                            req.number_of_openings,
+                            req.account,
+                            req.coe,
+                            req.coe_manager,
+                            req.criticality,
+                            req.years_of_experience_needed,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            ""
+                        }
+                     }
+                };
+                var jsonBody = JsonConvert.SerializeObject(requestBody);
+
+                var tableId = "{59B3CEF6-5295-44F5-B4EF-39E6A09E7F83}";
+                // Construct the URL for adding rows to the table
+                var url = $"https://graph.microsoft.com/v1.0/sites/7bhrxr.sharepoint.com,28983962-2b27-4b16-976c-24ebb19788d6,9b8c48bb-f5a5-4e40-92d6-8978f10efaad/drive/items/01MP4UW3UXIP62MK4R6NB2V2WP6DNQTEYI/workbook/tables/" + tableId + "/rows";
+
+                // Send the POST request to add the entry
+                var response = await httpClient.PostAsync(url, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok("Entry added successfully");
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    return StatusCode((int)response.StatusCode, errorResponse);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
         private async Task<int> GetLatestRequirementId()
         {
             try
@@ -359,24 +425,24 @@ namespace PSachiv_dotnet.Controllers
     public class Req
     {
         public string reqId { get; set; }
-        public string reqName { get; set; }
-        public string band { get; set; }
-        public string level { get; set; }
-        public string position_type {  get; set; }
-        public string number_of_openings { get; set; }
-        public string account { get; set; }
-        public string coe { get; set; }
-        public string coe_manager { get; set; }
-        public string criticality { get; set; }
-        public string years_of_experience_needed { get; set; }
-        public string expected_date_of_closure { get; set; }
-        public string requirement_Type { get; set; }
-        public string oc_stage1_approval_status { get; set; }
-        public string strategyMeet_status { get; set; }
-        public string dipstick_status { get; set; }
-        public string oc_stage2_approval_status { get; set; }
-        public string status { get; set;}
-    }
+        public string reqName { get; set; }//
+        public string band { get; set; }//
+        public string level { get; set; }//
+        public string position_type {  get; set; }//
+        public string number_of_openings { get; set; }//
+        public string account { get; set; }//
+        public string coe { get; set; }//
+        public string coe_manager { get; set; }//
+        public string criticality { get; set; }//
+        public string years_of_experience_needed { get; set; }//
+        public string? expected_date_of_closure { get; set; }
+        public string? requirement_Type { get; set; }
+        public string? oc_stage1_approval_status { get; set; }
+        public string? strategyMeet_status { get; set; }
+        public string? dipstick_status { get; set; }
+        public string? oc_stage2_approval_status { get; set; }
+        public string? status { get; set;}
+    
 }
 
 
