@@ -220,7 +220,6 @@ namespace PSachiv_dotnet.Controllers
     }
     public class Candidate
     {
-        [System.Text.Json.Serialization.JsonIgnore]
         public string candidate_id { get; set; }
         public string candidate_Name { get; set; }
         public string requirement_ID { get; set; }
