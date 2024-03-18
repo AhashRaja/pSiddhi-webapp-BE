@@ -121,23 +121,26 @@ namespace PSachiv_dotnet.Controllers
                         .Select(entry => new Req
                         {
                             reqId = entry[0].ToString(),
-                            reqName = entry[1].ToString(),
-                            band = entry[2].ToString(),
-                            level = entry[3].ToString(),
-                            position_type = entry[4].ToString(),
-                            number_of_openings = entry[5].ToString(),
-                            account = entry[6].ToString(),
-                            coe = entry[7].ToString(),
-                            coe_manager = entry[8].ToString(),
-                            criticality = entry[9].ToString(),
-                            years_of_experience_needed = entry[10].ToString(),
-                            expected_date_of_closure = entry[11].ToString(),
-                            requirement_Type = entry[12].ToString(),
-                            oc_stage1_approval_status = entry[13].ToString(),
-                            strategyMeet_status = entry[14].ToString(),
-                            dipstick_status = entry[15].ToString(),
-                            oc_stage2_approval_status = entry[16].ToString(),
-                            status = entry[17].ToString(),
+                            dipId = entry[1].ToString(),
+                            reqName = entry[2].ToString(),
+                            band = entry[3].ToString(),
+                            level = entry[4].ToString(),
+                            position_type = entry[5].ToString(),
+                            number_of_openings = entry[6].ToString(),
+                            account = entry[7].ToString(),
+                            coe = entry[8].ToString(),
+                            coe_manager = entry[9].ToString(),
+                            criticality = entry[10].ToString(),
+                            years_of_experience_needed = entry[11].ToString(),
+                            expected_date_of_closure = entry[12].ToString(),
+                            requirement_Type = entry[13].ToString(),
+                            oc_stage1_approval_status = entry[14].ToString(),
+                            oc_stage2_approval_status = entry[15].ToString(),
+                            created_by = entry[16].ToString(),
+                            created_on = entry[17].ToString(),
+                            modified_by = entry[18].ToString(),
+                            modified_on = entry[19].ToString(),
+                            status = entry[20].ToString(),
 
                         })
                         .FirstOrDefault(); // Assuming you only expect one matching entry
@@ -184,11 +187,19 @@ namespace PSachiv_dotnet.Controllers
                     // Use LINQ to find entries matching the provided requirement ID
                     var matchingEntries = valuesArray
                         .Where(entry => entry.Count() > 0 && entry[0].ToString() == requirementId)
-                        .Select(entry => new Req
+                        .Select(entry => new
                         {
                             reqId = entry[0].ToString(),
-                            reqName = entry[1].ToString(),
-                            position_type = entry[4].ToString(),
+                            reqName = entry[2].ToString(),
+                            band = entry[3].ToString(),
+                            level = entry[4].ToString(),
+                            position_type = entry[5].ToString(),
+                            number_of_openings = entry[6].ToString(),
+                            account = entry[7].ToString(),
+                            coe = entry[8].ToString(),
+                            coe_manager = entry[9].ToString(),
+                            criticality = entry[10].ToString(),
+                            years_of_experience_needed = entry[11].ToString(),
                             status = entry[17].ToString()
                         })
                         .FirstOrDefault(); // Assuming you only expect one matching entry
@@ -225,7 +236,7 @@ namespace PSachiv_dotnet.Controllers
 
                 // Fetch the latest requirement ID and increment it
                 var latestRequirementId = await GetLatestRequirementId();
-                var newRequirementId = latestRequirementId + 1;
+                var newRequirementId = latestRequirementId;
 
 
                 var requestBody = new EntryRequestModel
@@ -235,6 +246,7 @@ namespace PSachiv_dotnet.Controllers
                         new List<object>
                         {
                             newRequirementId.ToString(),
+                            req.dipId,
                             req.reqName,
                             req.band,
                             req.level,
@@ -248,9 +260,11 @@ namespace PSachiv_dotnet.Controllers
                             req.expected_date_of_closure,
                             req.requirement_Type,
                             req.oc_stage1_approval_status,
-                            req.strategyMeet_status,
-                            req.dipstick_status,
                             req.oc_stage2_approval_status,
+                            req.created_by,
+                            req.created_on,
+                            req.modified_by,
+                            req.modified_on,
                             req.status
 
                         }
@@ -281,7 +295,7 @@ namespace PSachiv_dotnet.Controllers
                 //var tableId = await GetTableIdByRequirementId(newRequirementId, httpClient);*/
 
 
-                var tableId = "{59B3CEF6-5295-44F5-B4EF-39E6A09E7F83}";
+                var tableId = "{3F5DC472-92FD-4BB2-A036-DB8AE3FD89C2}";
                 // Construct the URL for adding rows to the table
                 var url = $"https://graph.microsoft.com/v1.0/sites/7bhrxr.sharepoint.com,28983962-2b27-4b16-976c-24ebb19788d6,9b8c48bb-f5a5-4e40-92d6-8978f10efaad/drive/items/01MP4UW3UXIP62MK4R6NB2V2WP6DNQTEYI/workbook/tables/" + tableId + "/rows";
 
@@ -315,7 +329,7 @@ namespace PSachiv_dotnet.Controllers
 
                 // Fetch the latest requirement ID and increment it
                 var latestRequirementId = await GetLatestRequirementId();
-                var newRequirementId = latestRequirementId + 1;
+                var newRequirementId = latestRequirementId;
 
 
                 var requestBody = new EntryRequestModel
@@ -325,6 +339,7 @@ namespace PSachiv_dotnet.Controllers
                         new List<object>
                         {
                             newRequirementId.ToString(),
+                            "",
                             req.reqName,
                             req.band,
                             req.level,
@@ -341,13 +356,15 @@ namespace PSachiv_dotnet.Controllers
                             "",
                             "",
                             "",
+                            "",
+                            "",
                             ""
                         }
                      }
                 };
                 var jsonBody = JsonConvert.SerializeObject(requestBody);
 
-                var tableId = "{59B3CEF6-5295-44F5-B4EF-39E6A09E7F83}";
+                var tableId = "{3F5DC472-92FD-4BB2-A036-DB8AE3FD89C2}";
                 // Construct the URL for adding rows to the table
                 var url = $"https://graph.microsoft.com/v1.0/sites/7bhrxr.sharepoint.com,28983962-2b27-4b16-976c-24ebb19788d6,9b8c48bb-f5a5-4e40-92d6-8978f10efaad/drive/items/01MP4UW3UXIP62MK4R6NB2V2WP6DNQTEYI/workbook/tables/" + tableId + "/rows";
 
@@ -369,7 +386,7 @@ namespace PSachiv_dotnet.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        private async Task<int> GetLatestRequirementId()
+        private async Task<string> GetLatestRequirementId()
         {
             try
             {
@@ -396,39 +413,112 @@ namespace PSachiv_dotnet.Controllers
                     if (lastRowIndex != -1)
                     {
                         // Retrieve the latest requirement ID from the first column of the last row
-                        if (int.TryParse(valuesArray[lastRowIndex][0].ToString(), out int latestRequirementId))
+                        var latestRequirementId = valuesArray[lastRowIndex][0].ToString();
+                        // Extract numeric portion from the requirement ID
+                        var numericPortion = latestRequirementId.Substring(3);
+                        // Parse the numeric portion to integer
+                        if (int.TryParse(numericPortion, out int latestNumericId))
                         {
-                            // Conversion successful, use latestRequirementId
-                            return latestRequirementId;
+                            // Increment the numeric ID by 1
+                            latestNumericId++;
+                            // Format the numeric ID back to "REQXXX" format
+                            var formattedLatestId = $"REQ{latestNumericId:D3}";
+                            return formattedLatestId;
                         }
                         else
-                            return -1;
+                        {
+                            // If parsing fails, return an error
+                            return "Error: Unable to parse requirement ID";
+                        }
                     }
                     else
-                        return -1;
+                    {
+                        // Handle case where no data is available
+                        return "REQ001"; // Assuming default starting ID is REQ001
+                    }
                 }
                 else
                 {
                     var errorResponse = await response.Content.ReadAsStringAsync();
                     // Handle error response
-                    return -1; 
+                    return "Error: " + errorResponse; // Or return a default value, or throw an exception
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return -1; 
+                // Handle exceptions
+                return "Exception: " + ex.Message; // Or return a default value, or rethrow the exception
             }
-        }     
-        
+        }
+
+        [HttpPut("UpdateSpecificEntry/{rowId}")] // Define the route to include the row ID
+        public async Task<IActionResult> UpdateSpecificEntry(string rowId, [FromBody] Req updatedReq)
+        {
+            try
+            {
+                var accessToken = await _accessTokenService.GetAccessTokenAsync();
+                using var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                var tableId = "{3F5DC472-92FD-4BB2-A036-DB8AE3FD89C2}";
+                // Construct the URL for adding rows to the table
+                var url = $"https://graph.microsoft.com/v1.0/sites/7bhrxr.sharepoint.com,28983962-2b27-4b16-976c-24ebb19788d6,9b8c48bb-f5a5-4e40-92d6-8978f10efaad/drive/items/01MP4UW3UXIP62MK4R6NB2V2WP6DNQTEYI/workbook/tables/" + tableId + "/rows/"+ rowId;
+
+                // Fetch the existing values
+                var response = await httpClient.GetAsync(url);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    return StatusCode((int)response.StatusCode, errorResponse);
+                }
+
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var jsonObject = JObject.Parse(jsonResponse);
+                var valuesArray = jsonObject["values"] as JArray;
+
+                // Use LINQ to find the entry matching the provided row ID
+                var matchingEntry = valuesArray
+                    .Where(entry => entry.Count() > 0 && entry[0].ToString() == rowId) // Assuming the row ID is in the first column
+                    .FirstOrDefault(); // Assuming you only expect one matching entry
+
+                if (matchingEntry != null)
+                {
+                    // Update the reqName field of the matching entry
+                    matchingEntry[2] = updatedReq.reqName; // Assuming reqName is in the third column (index 2)
+
+                    // Construct the updated response with only reqId and updated reqName
+                    var updatedResponse = new
+                    {
+                        reqId = matchingEntry[0].ToString(),
+                        reqName = matchingEntry[2].ToString() // Updated reqName
+                    };
+
+                    return Ok(updatedResponse);
+                }
+                else
+                {
+                    return NotFound(); // Return 404 if no matching entry is found
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+
     }
 
     public class Req
     {
         public string reqId { get; set; }
+        public string dipId { get; set; }
         public string reqName { get; set; }//
         public string band { get; set; }//
         public string level { get; set; }//
-        public string position_type {  get; set; }//
+        public string position_type { get; set; }//
         public string number_of_openings { get; set; }//
         public string account { get; set; }//
         public string coe { get; set; }//
@@ -438,11 +528,13 @@ namespace PSachiv_dotnet.Controllers
         public string? expected_date_of_closure { get; set; }
         public string? requirement_Type { get; set; }
         public string? oc_stage1_approval_status { get; set; }
-        public string? strategyMeet_status { get; set; }
-        public string? dipstick_status { get; set; }
         public string? oc_stage2_approval_status { get; set; }
-        public string? status { get; set;}
-    
+        public string? created_by { get; set; }
+        public string? created_on { get; set; }
+        public string? modified_by { get; set; }
+        public string? modified_on { get; set; }
+        public string? status { get; set; }
+    }
 }
 
 
