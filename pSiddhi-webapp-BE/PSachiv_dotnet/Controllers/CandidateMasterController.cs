@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.Graph.Models.Security;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PSachiv_dotnet.Services;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace PSachiv_dotnet.Controllers
 {
@@ -215,6 +217,223 @@ namespace PSachiv_dotnet.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPost("AddEntry")]
+        public async Task<IActionResult> AddEntry([FromBody] Candidate can)
+        {
+            try
+            {
+                var accessToken = await _accessTokenService.GetAccessTokenAsync();
+                using var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                // Fetch the latest candidate ID and increment it
+                var latestCandidateId = await GetLatestCandidateId();
+                var newCandidateId = latestCandidateId;
+
+
+                var requestBody = new EntryRequestModel
+                {
+                    values = new List<List<object>>
+                    {
+                        new List<object>
+                        {
+                            newCandidateId.ToString(),
+                            can.candidate_Name,
+                            can.requirement_ID,
+                            can.recruiter,
+                            can.tech_Skill,
+                            can.education,
+                            can.educational_Details_in_Percentage,
+                            can.Type_of_source,
+                            can.Company_Experience,
+                            can.Years_of_experience,
+                            can.Communication,
+                            can.CTC_Details,
+                            can.CTC_Breakup,
+                            can.Reason_for_Change,
+                            can.Last_working_date,
+                            can.Any_Other_offer,
+                            can.Contact_Number,
+                            can.Candidate_Email_Id,
+                            can.Offers_at_hand_Value,
+                            can.Offer_status,
+                            can.Candidate_reply_offer,
+                            can.Onboarding_status,
+                            can.Overall_status,
+                            can.Shortlisted_date,
+                            can.Created_by,
+                            can.Created_on,
+                            can.Modified_by,
+                            can.Modified_on
+
+                        }
+                     }
+                };
+                var jsonBody = JsonConvert.SerializeObject(requestBody);
+
+
+                var tableId = "{4C22F0F9-7CDA-4BF3-8794-C15CF6D59EE4}";
+                // Construct the URL for adding rows to the table
+                var url = $"https://graph.microsoft.com/v1.0/sites/7bhrxr.sharepoint.com,28983962-2b27-4b16-976c-24ebb19788d6,9b8c48bb-f5a5-4e40-92d6-8978f10efaad/drive/items/01MP4UW3TCJE43KAMG75CLESVWC7CDFZNJ/workbook/tables/" + tableId + "/rows";
+
+                // Send the POST request to add the entry
+                var response = await httpClient.PostAsync(url, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok("Entry added successfully");
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    return StatusCode((int)response.StatusCode, errorResponse);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("AddSpecificEntry")]
+        public async Task<IActionResult> AddSpecificEntry([FromBody] Candidate can)
+        {
+            try
+            {
+                var accessToken = await _accessTokenService.GetAccessTokenAsync();
+                using var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                // Fetch the latest candidate ID and increment it
+                var latestCandidateId = await GetLatestCandidateId();
+                var newCandidateId = latestCandidateId;
+
+
+                var requestBody = new EntryRequestModel
+                {
+                    values = new List<List<object>>
+                    {
+                        new List<object>
+                        {
+                            newCandidateId.ToString(),
+                            can.candidate_Name,
+                            "",
+                            can.recruiter,
+                            can.tech_Skill,
+                            can.education,
+                            can.educational_Details_in_Percentage,
+                            can.Type_of_source,
+                            can.Company_Experience,
+                            can.Years_of_experience,
+                            can.Communication,
+                            can.CTC_Details,
+                            can.CTC_Breakup,
+                            can.Reason_for_Change,
+                            can.Last_working_date,
+                            can.Any_Other_offer,
+                            can.Contact_Number,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            ""
+                        }
+                     }
+                };
+                var jsonBody = JsonConvert.SerializeObject(requestBody);
+
+                var tableId = "{4C22F0F9-7CDA-4BF3-8794-C15CF6D59EE4}";
+                // Construct the URL for adding rows to the table
+                var url = $"https://graph.microsoft.com/v1.0/sites/7bhrxr.sharepoint.com,28983962-2b27-4b16-976c-24ebb19788d6,9b8c48bb-f5a5-4e40-92d6-8978f10efaad/drive/items/01MP4UW3TCJE43KAMG75CLESVWC7CDFZNJ/workbook/tables/" + tableId + "/rows";
+
+                // Send the POST request to add the entry
+                var response = await httpClient.PostAsync(url, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok("Entry added successfully");
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    return StatusCode((int)response.StatusCode, errorResponse);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        private async Task<string> GetLatestCandidateId()
+        {
+            try
+            {
+                var accessToken = await _accessTokenService.GetAccessTokenAsync();
+                using var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                var response = await httpClient.GetAsync("https://graph.microsoft.com/v1.0/sites/7bhrxr.sharepoint.com,28983962-2b27-4b16-976c-24ebb19788d6,9b8c48bb-f5a5-4e40-92d6-8978f10efaad/drives/b!YjmYKCcrFkuXbCTrsZeI1rtIjJul9UBOktaJePEO-q2B8AEr-kgpQJgsYIVKte_z/items/01MP4UW3TCJE43KAMG75CLESVWC7CDFZNJ/workbook/worksheets('Sheet1')/usedRange");
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var jsonObject = JObject.Parse(jsonResponse);
+
+                    // Get the array of values from the response
+                    var valuesArray = jsonObject["values"] as JArray;
+
+                    // Find the index of the last row without null entries
+                    var lastRowIndex = valuesArray
+                        .Cast<JArray>()
+                        .Select((row, index) => new { Row = row, Index = index })
+                        .LastOrDefault(item => item.Row != null && item.Row.HasValues && item.Row.Any(v => !string.IsNullOrEmpty(v.ToString())))
+                        ?.Index ?? -1;
+
+                    if (lastRowIndex != -1)
+                    {
+                        // Retrieve the latest candidate ID from the first column of the last row
+                        var latestCandidateId = valuesArray[lastRowIndex][0].ToString();
+                        // Extract numeric portion from the candidate ID
+                        var numericPortion = latestCandidateId.Substring(3);
+                        // Parse the numeric portion to integer
+                        if (int.TryParse(numericPortion, out int latestNumericId))
+                        {
+                            // Increment the numeric ID by 1
+                            latestNumericId++;
+                            // Format the numeric ID back to "CANXXX" format
+                            var formattedLatestId = $"CAN{latestNumericId:D3}";
+                            return formattedLatestId;
+                        }
+                        else
+                        {
+                            // If parsing fails, return an error
+                            return "Error: Unable to parse requirement ID";
+                        }
+                    }
+                    else
+                    {
+                        // Handle case where no data is available
+                        return "CAN001"; // Assuming default starting ID is CAN001
+                    }
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    // Handle error response
+                    return "Error: " + errorResponse; // Or return a default value, or throw an exception
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                return "Exception: " + ex.Message; // Or return a default value, or rethrow the exception
             }
         }
     }
