@@ -117,7 +117,7 @@ namespace PSachiv_dotnet.Controllers
                     // Use LINQ to find entries matching the provided candidate ID
                     var matchingEntries = valuesArray
                         .Where(entry => entry.Count() > 0 && (entry[0].ToString() == candidateId && entry[2].ToString() == requirementid))
-                        .Select(entry => new Candidate
+                        .Select(entry => new
                         {
                             candidate_id = entry[0].ToString(),
                             candidate_Name = entry[1].ToString(),
@@ -133,7 +133,7 @@ namespace PSachiv_dotnet.Controllers
                             CTC_Details = entry[11].ToString(),
                             CTC_Breakup = entry[12].ToString(),
                             Reason_for_Change = entry[13].ToString(),
-                            Last_working_date = entry[14].ToString(),
+                            Last_working_date = DateTime.FromOADate(double.Parse(entry[14].ToString())).ToString("M/d/yyyy"),
                             Any_Other_offer = entry[15].ToString(),
                             Contact_Number = entry[16].ToString(),
                             Offers_at_hand_Value = entry[17].ToString(),
@@ -142,9 +142,9 @@ namespace PSachiv_dotnet.Controllers
                             Onboarding_status = entry[20].ToString(),
                             Overall_status = entry[21].ToString(),
                             Shortlisted_date = entry[22].ToString(),
-                            Created_by = entry[23].ToString(),
+                            Created_by = DateTime.FromOADate(double.Parse(entry[23].ToString())).ToString("M/d/yyyy"),
                             Created_on = entry[24].ToString(),
-                            Modified_by = entry[25].ToString(),
+                            Modified_by = DateTime.FromOADate(double.Parse(entry[25].ToString())).ToString("M/d/yyyy"),
                             Modified_on = entry[26].ToString(),
                         })
                         .FirstOrDefault(); // Assuming you only expect one matching entry
@@ -190,7 +190,7 @@ namespace PSachiv_dotnet.Controllers
                     // Use LINQ to find entries matching the provided candidate ID
                     var matchingEntries = valuesArray
                         .Where(entry => entry.Count() > 0 && (entry[0].ToString() == candidateId && entry[2].ToString() == requirementid))
-                        .Select(entry => new Candidate
+                        .Select(entry => new
                         {
                             candidate_id = entry[0].ToString(),
                             candidate_Name = entry[1].ToString(),
@@ -274,7 +274,7 @@ namespace PSachiv_dotnet.Controllers
                 var jsonBody = JsonConvert.SerializeObject(requestBody);
 
 
-                var tableId = "{4C22F0F9-7CDA-4BF3-8794-C15CF6D59EE4}";
+                var tableId = "{62549E24-B12A-41B6-A044-8E3993A7F7B0}";
                 // Construct the URL for adding rows to the table
                 var url = $"https://graph.microsoft.com/v1.0/sites/7bhrxr.sharepoint.com,28983962-2b27-4b16-976c-24ebb19788d6,9b8c48bb-f5a5-4e40-92d6-8978f10efaad/drive/items/01MP4UW3TCJE43KAMG75CLESVWC7CDFZNJ/workbook/tables/" + tableId + "/rows";
 
@@ -350,7 +350,7 @@ namespace PSachiv_dotnet.Controllers
                 };
                 var jsonBody = JsonConvert.SerializeObject(requestBody);
 
-                var tableId = "{4C22F0F9-7CDA-4BF3-8794-C15CF6D59EE4}";
+                var tableId = "{62549E24-B12A-41B6-A044-8E3993A7F7B0}";
                 // Construct the URL for adding rows to the table
                 var url = $"https://graph.microsoft.com/v1.0/sites/7bhrxr.sharepoint.com,28983962-2b27-4b16-976c-24ebb19788d6,9b8c48bb-f5a5-4e40-92d6-8978f10efaad/drive/items/01MP4UW3TCJE43KAMG75CLESVWC7CDFZNJ/workbook/tables/" + tableId + "/rows";
 
