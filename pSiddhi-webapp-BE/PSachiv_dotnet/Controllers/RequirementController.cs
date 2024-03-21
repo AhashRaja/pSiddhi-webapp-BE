@@ -132,14 +132,14 @@ namespace PSachiv_dotnet.Controllers
                             coe_manager = entry[9].ToString(),
                             criticality = entry[10].ToString(),
                             years_of_experience_needed = entry[11].ToString(),
-                            expected_date_of_closure = entry[12].ToString(),
+                            expected_date_of_closure = DateTime.FromOADate(double.Parse(entry[12].ToString())).ToString("M/d/yyyy"),
                             requirement_Type = entry[13].ToString(),
                             oc_stage1_approval_status = entry[14].ToString(),
                             oc_stage2_approval_status = entry[15].ToString(),
                             created_by = entry[16].ToString(),
-                            created_on = entry[17].ToString(),
+                            created_on = DateTime.FromOADate(double.Parse(entry[17].ToString())).ToString("M/d/yyyy"),
                             modified_by = entry[18].ToString(),
-                            modified_on = entry[19].ToString(),
+                            modified_on = DateTime.FromOADate(double.Parse(entry[19].ToString())).ToString("M/d/yyyy"),
                             status = entry[20].ToString(),
 
                         })
